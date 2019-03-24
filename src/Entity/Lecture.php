@@ -2,6 +2,8 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use ApiPlatform\Core\Annotation\ApiResource;
 
@@ -98,115 +100,133 @@ class Lecture
      */
     private $slotsOccupied = '0';
 
+    /**
+     * @var Collection
+     *
+     * @ORM\ManyToMany(targetEntity="User", mappedBy="lectures")
+     */
+    private $users;
+
+    /**
+     * Lecture constructor.
+     */
+    public function __construct()
+    {
+        $this->users = new ArrayCollection();
+    }
+
+    /**
+     * @return int|null
+     */
     public function getIdLecture(): ?int
     {
         return $this->idLecture;
     }
 
+    /**
+     * @return null|string
+     */
     public function getName(): ?string
     {
         return $this->name;
     }
 
-    public function setName(string $name): self
-    {
-        $this->name = $name;
-
-        return $this;
-    }
-
+    /**
+     * @return int|null
+     */
     public function getEcts(): ?int
     {
         return $this->ects;
     }
 
-    public function setEcts(int $ects): self
-    {
-        $this->ects = $ects;
-
-        return $this;
-    }
-
+    /**
+     * @return null|string
+     */
     public function getLecturer(): ?string
     {
         return $this->lecturer;
     }
 
-    public function setLecturer(string $lecturer): self
-    {
-        $this->lecturer = $lecturer;
-
-        return $this;
-    }
-
+    /**
+     * @return null|string
+     */
     public function getAuditorium(): ?string
     {
         return $this->auditorium;
     }
 
-    public function setAuditorium(string $auditorium): self
-    {
-        $this->auditorium = $auditorium;
-
-        return $this;
-    }
-
+    /**
+     * @return null|string
+     */
     public function getWeekday(): ?string
     {
         return $this->weekday;
     }
 
-    public function setWeekday(string $weekday): self
-    {
-        $this->weekday = $weekday;
-
-        return $this;
-    }
-
+    /**
+     * @return null|string
+     */
     public function getWeek(): ?string
     {
         return $this->week;
     }
 
-    public function setWeek(string $week): self
-    {
-        $this->week = $week;
-
-        return $this;
-    }
-
+    /**
+     * @return null|string
+     */
     public function getHour(): ?string
     {
         return $this->hour->format('H:i');
     }
 
-    public function setHour(\DateTimeInterface $hour): self
-    {
-        $this->hour = $hour;
-
-        return $this;
-    }
-
+    /**
+     * @return int|null
+     */
     public function getSlots(): ?int
     {
         return $this->slots;
     }
 
-    public function setSlots(int $slots): self
-    {
-        $this->slots = $slots;
-
-        return $this;
-    }
-
+    /**
+     * @return int|null
+     */
     public function getSlotsOccupied(): ?int
     {
         return $this->slotsOccupied;
     }
 
-    public function setSlotsOccupied(int $slotsOccupied): self
+    /**
+     * @return Collection|User[]
+     */
+    public function getUsers(): Collection
     {
-        $this->slotsOccupied = $slotsOccupied;
+        return $this->users;
+    }
+
+    /**
+     * @param User $user
+     * @return Lecture
+     */
+    public function addUser(User $user): self
+    {
+        if (!$this->users->contains($user)) {
+            $this->users[] = $user;
+            $user->addLecture($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param User $user
+     * @return Lecture
+     */
+    public function removeUser(User $user): self
+    {
+        if ($this->users->contains($user)) {
+            $this->users->removeElement($user);
+            $user->removeLecture($this);
+        }
 
         return $this;
     }

@@ -24,13 +24,15 @@ final class RegistrationRequest
      * @var string
      *
      * @Assert\NotBlank
+     * @Assert\Regex("/^[0-9]{6}$/")
      */
-    public $index;
+    public $studentIndex;
 
     /**
      * @var int
      *
      * @Assert\NotBlank
+     * @Assert\Type(type="integer")
      */
     public $lectureId;
 }
