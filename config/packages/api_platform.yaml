@@ -10,6 +10,18 @@ api_platform:
         paths: ['%kernel.project_dir%/src/Entity']
     title: WDW API
     version: 1.0.0
+    swagger:
+        api_keys:
+            apiKey:
+                name: Authorization
+                type: header
+    formats:
+        json:
+            mime_types: ['application/json']
+        jsonld:
+            mime_types: ['application/ld+json']
+
+
     # Varnish integration, remove if unwanted
     http_cache:
         invalidation:
