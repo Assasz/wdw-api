@@ -22,7 +22,8 @@ api_platform:
             mime_types: ['application/ld+json']
         html:
             mime_types: ['text/html']
-
+    exception_to_status:
+            ApiPlatform\Core\Exception\InvalidArgumentException: 400
 
     # Varnish integration, remove if unwanted
     http_cache:

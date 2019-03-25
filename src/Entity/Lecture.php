@@ -11,7 +11,7 @@ use ApiPlatform\Core\Annotation\ApiResource;
  * Lecture
  *
  * @ORM\Table(name="lecture")
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="App\Repository\LectureRepository")
  *
  * @ApiResource(
  *     collectionOperations={

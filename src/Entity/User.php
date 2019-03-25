@@ -12,7 +12,7 @@ use ApiPlatform\Core\Annotation\ApiResource;
  * User
  *
  * @ORM\Table(name="user")
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="App\Repository\UserRepository")
  *
  * @ApiResource(
  *     collectionOperations={},

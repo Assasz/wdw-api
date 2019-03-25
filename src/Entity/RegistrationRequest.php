@@ -6,27 +6,30 @@ use ApiPlatform\Core\Annotation\ApiResource;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
+ * RegistrationRequest
+ *
  * @ApiResource(
- *     messenger=true,
  *     collectionOperations={
  *         "post"={
+ *             "path"="/register_to_lecture",
  *             "status"=202,
  *             "access_control"="is_granted('ROLE_USER')"
  *         }
  *     },
  *     itemOperations={},
+ *     messenger=true,
  *     output=false
  * )
  */
 final class RegistrationRequest
 {
     /**
-     * @var string
+     * @var int
      *
      * @Assert\NotBlank
-     * @Assert\Regex("/^[0-9]{6}$/")
+     * @Assert\Type(type="integer")
      */
-    public $studentIndex;
+    public $idUser;
 
     /**
      * @var int
@@ -34,5 +37,5 @@ final class RegistrationRequest
      * @Assert\NotBlank
      * @Assert\Type(type="integer")
      */
-    public $lectureId;
+    public $idLecture;
 }
