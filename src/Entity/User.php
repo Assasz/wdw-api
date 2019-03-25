@@ -15,7 +15,11 @@ use ApiPlatform\Core\Annotation\ApiResource;
  * @ORM\Entity(repositoryClass="App\Repository\UserRepository")
  *
  * @ApiResource(
- *     collectionOperations={},
+ *     collectionOperations={
+ *         "get"={
+ *             "access_control"="is_granted('ROLE_USER')"
+ *         }
+ *     },
  *     itemOperations={
  *         "get"={
  *             "access_control"="is_granted('ROLE_USER')"
