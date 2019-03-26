@@ -2,6 +2,8 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use ApiPlatform\Core\Annotation\ApiResource;
 
@@ -71,6 +73,21 @@ class Specialisation
     private $ectsLimit;
 
     /**
+     * @var Collection
+     *
+     * @ORM\OneToMany(targetEntity="Lecture", mappedBy="specialisation")
+     */
+    private $lectures;
+
+    /**
+     * Specialisation constructor.
+     */
+    public function __construct()
+    {
+        $this->lectures = new ArrayCollection();
+    }
+
+    /**
      * @return int|null
      */
     public function getIdSpecialisation(): ?int
@@ -116,5 +133,13 @@ class Specialisation
     public function getEctsLimit(): ?int
     {
         return $this->ectsLimit;
+    }
+
+    /**
+     * @return Collection|Lecture[]
+     */
+    public function getLectures(): Collection
+    {
+        return $this->lectures;
     }
 }

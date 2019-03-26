@@ -108,6 +108,14 @@ class Lecture
     private $users;
 
     /**
+     * @var Specialisation
+     *
+     * @ORM\ManyToOne(targetEntity="Specialisation", inversedBy="lectures")
+     * @ORM\JoinColumn(name="id_specialisation", referencedColumnName="id_specialisation")
+     */
+    private $specialisation;
+
+    /**
      * Lecture constructor.
      */
     public function __construct()
@@ -229,5 +237,13 @@ class Lecture
         }
 
         return $this;
+    }
+
+    /**
+     * @return Specialisation|null
+     */
+    public function getSpecialisation(): ?Specialisation
+    {
+        return $this->specialisation;
     }
 }
