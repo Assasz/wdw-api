@@ -4,6 +4,7 @@ namespace App\Repository;
 
 use App\Entity\Lecture;
 use App\Entity\User;
+use App\Utils\RegistrationErrorLogger;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
 
@@ -15,13 +16,21 @@ use Doctrine\Common\Persistence\ManagerRegistry;
 class UserRepository extends ServiceEntityRepository
 {
     /**
+     * @var RegistrationErrorLogger
+     */
+    private $logger;
+
+    /**
      * UserRepository constructor.
      *
      * @param ManagerRegistry $registry
+     * @param RegistrationErrorLogger $logger
      */
-    public function __construct(ManagerRegistry $registry)
+    public function __construct(ManagerRegistry $registry, RegistrationErrorLogger $logger)
     {
         parent::__construct($registry, User::class);
+
+        $this->logger = $logger;
     }
 
     /**
@@ -37,29 +46,34 @@ class UserRepository extends ServiceEntityRepository
         $user = $this->find($idUser);
 
         if (empty($user)) {
-            //throw new InvalidArgumentException('User by given ID does not exist.');
+            $this->logger->log("User (ID:{$idUser}) does not exist.");
+
             return;
         }
 
         $lecture = $this->getEntityManager()->getRepository(Lecture::class)->find($idLecture);
 
         if (empty($lecture)) {
-            //throw new InvalidArgumentException('Lecture by given ID does not exist.');
+            $this->logger->log("Lecture (ID:{$idLecture}) does not exist.");
+
             return;
         }
 
         if ($user->getLectures()->contains($lecture)) {
-            //throw new InvalidArgumentException('User is already registered to given lecture.');
+            $this->logger->log("User (ID:{$idUser}) is already registered to lecture (ID:{$idLecture}).");
+
             return;
         }
 
         if ($lecture->getSlots() <= $lecture->getSlotsOccupied()) {
-            //throw new InvalidArgumentException('Lecture by given ID has no free slots.');
+            $this->logger->log("Lecture (ID:{$idLecture}) has no free slots.");
+
             return;
         }
 
         if (!$user->getSpecialisations()->contains($lecture->getSpecialisation())) {
-            //throw new InvalidArgumentException('User has no access to given lecture.');
+            $this->logger->log("User (ID:{$idUser}) has no access to lecture (ID:{$idLecture}).");
+
             return;
         }
 
@@ -76,7 +90,8 @@ class UserRepository extends ServiceEntityRepository
         });
 
         if ($lecturesEcts[0] >= $specialisation->getEctsLimit()) {
-            //throw new InvalidArgumentException('User has exceeded specialisation ECTS limit.');
+            $this->logger->log("User (ID:{$idUser}) has exceeded specialisation (ID:{$specialisation->getIdSpecialisation()}) ECTS limit.");
+
             return;
         }
 

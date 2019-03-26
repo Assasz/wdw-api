@@ -1,6 +1,7 @@
 /helm/api/charts
 /.idea
 .env
+logs.txt
 
 ###> symfony/framework-bundle ###
 /.env.local
