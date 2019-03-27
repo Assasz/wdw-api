@@ -1,16 +1,16 @@
 <?php
 
-namespace App\Utils;
+namespace App\Utils\Logger;
 
 /**
- * Class RegistrationErrorLogger
+ * Class ErrorLogger
  *
  * @package App\Utils
  */
-class RegistrationErrorLogger
+class ErrorLogger implements LoggerInterface
 {
     /**
-     * Logs registration error
+     * Logs error message in output file
      *
      * @param string $message
      */

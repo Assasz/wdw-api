@@ -4,7 +4,7 @@ namespace App\Repository;
 
 use App\Entity\Lecture;
 use App\Entity\User;
-use App\Utils\RegistrationErrorLogger;
+use App\Utils\Logger\LoggerInterface;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
 
@@ -16,7 +16,7 @@ use Doctrine\Common\Persistence\ManagerRegistry;
 class UserRepository extends ServiceEntityRepository
 {
     /**
-     * @var RegistrationErrorLogger
+     * @var LoggerInterface
      */
     private $logger;
 
@@ -24,9 +24,9 @@ class UserRepository extends ServiceEntityRepository
      * UserRepository constructor.
      *
      * @param ManagerRegistry $registry
-     * @param RegistrationErrorLogger $logger
+     * @param LoggerInterface $logger
      */
-    public function __construct(ManagerRegistry $registry, RegistrationErrorLogger $logger)
+    public function __construct(ManagerRegistry $registry, LoggerInterface $logger)
     {
         parent::__construct($registry, User::class);
 
