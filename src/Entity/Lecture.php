@@ -16,12 +16,65 @@ use ApiPlatform\Core\Annotation\ApiResource;
  * @ApiResource(
  *     collectionOperations={
  *         "get"={
- *             "access_control"="is_granted('ROLE_USER')"
+ *             "access_control"="is_granted('ROLE_USER')",
+ *             "swagger_context"={
+ *                  "responses"={
+ *                      "200"={
+ *                          "description"="Retrieves the collection of Lecture resources.",
+ *                          "examples"={
+ *                              "application/json"={
+ *                                  {
+ *                                      "idLecture": 0,
+ *                                      "name": "string",
+ *                                      "ects": 0,
+ *                                      "lecturer": "string",
+ *                                      "auditorium": "string",
+ *                                      "weekday": "string",
+ *                                      "week": "string",
+ *                                      "hour": "12:00",
+ *                                      "slots": 0,
+ *                                      "slotsOccupied": 0,
+ *                                      "users": {
+ *                                          0:"string"
+ *                                      }
+ *                                  }
+ *                              }
+ *                          }
+ *                      }
+ *                  }
+ *              }
  *         }
  *     },
  *     itemOperations={
  *         "get"={
- *             "access_control"="is_granted('ROLE_USER')"
+ *             "access_control"="is_granted('ROLE_USER')",
+ *             "swagger_context"={
+ *                  "responses"={
+ *                      "200"={
+ *                          "description"="Retrieves a Lecture resource.",
+ *                          "examples"={
+ *                              "application/json"={
+ *                                  "idLecture": 0,
+ *                                  "name": "string",
+ *                                  "ects": 0,
+ *                                  "lecturer": "string",
+ *                                  "auditorium": "string",
+ *                                  "weekday": "string",
+ *                                  "week": "string",
+ *                                  "hour": "12:00",
+ *                                  "slots": 0,
+ *                                  "slotsOccupied": 0,
+ *                                  "users": {
+ *                                      0:"string"
+ *                                  }
+ *                              }
+ *                          }
+ *                      },
+ *                      "404"={
+ *                          "description"="Resource not found"
+ *                      }
+ *                  }
+ *              }
  *         }
  *     }
  * )
