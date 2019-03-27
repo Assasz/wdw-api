@@ -19,7 +19,7 @@ class ErrorLogger implements LoggerInterface
         $date = (new \DateTime())->format('Y-m-d H:i:s');
         $log = "[{$date}] {$message}" . PHP_EOL;
 
-        $handle = fopen($_ENV['LOG_PATH'], 'a');
+        $handle = fopen($_ENV['LOG_OUTPUT'], 'a');
         fwrite($handle, $log);
         fclose($handle);
     }
