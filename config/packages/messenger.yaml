@@ -6,4 +6,5 @@ framework:
 
         routing:
             # Route your messages to the transports
-            'App\Entity\RegistrationRequest': amqp
+            'App\Entity\SubscribeRequest': amqp
+            'App\Entity\UnsubscribeRequest': amqp

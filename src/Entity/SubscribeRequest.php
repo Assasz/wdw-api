@@ -6,12 +6,12 @@ use ApiPlatform\Core\Annotation\ApiResource;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * RegistrationRequest
+ * SubscribeRequest
  *
  * @ApiResource(
  *     collectionOperations={
  *         "post"={
- *             "path"="/register_to_lecture",
+ *             "path"="/lectures/subscribe",
  *             "status"=202,
  *             "access_control"="is_granted('ROLE_USER')"
  *         }
@@ -21,7 +21,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  *     output=false
  * )
  */
-final class RegistrationRequest
+final class SubscribeRequest
 {
     /**
      * @var int
