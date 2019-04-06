@@ -13,6 +13,7 @@ class ErrorLogger implements LoggerInterface
      * Logs error message in output file
      *
      * @param string $message
+     * @throws \Exception
      */
     public function log(string $message): void
     {

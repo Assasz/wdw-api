@@ -35,7 +35,7 @@ class UnsubscribeRequestHandler implements MessageHandlerInterface
      * @throws \Doctrine\ORM\ORMException
      * @throws \Doctrine\ORM\OptimisticLockException
      */
-    public function __invoke(UnsubscribeRequest $request)
+    public function __invoke(UnsubscribeRequest $request): void
     {
         $this->lectureRepository->unsubscribe($request->idLecture, $request->idUser);
     }

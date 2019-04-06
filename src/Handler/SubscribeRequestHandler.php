@@ -35,7 +35,7 @@ class SubscribeRequestHandler implements MessageHandlerInterface
      * @throws \Doctrine\ORM\ORMException
      * @throws \Doctrine\ORM\OptimisticLockException
      */
-    public function __invoke(SubscribeRequest $request)
+    public function __invoke(SubscribeRequest $request): void
     {
         $this->lectureRepository->subscribe($request->idLecture, $request->idUser);
     }
