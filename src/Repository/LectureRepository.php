@@ -95,9 +95,7 @@ class LectureRepository extends ServiceEntityRepository
             return;
         }
 
-        $lecture->addUser($user);
-        $lecture->setSlotsOccupied($lecture->getSlotsOccupied() + 1);
-
+        $lecture->addUser($user)->setSlotsOccupied($lecture->getSlotsOccupied() + 1);
         $this->getEntityManager()->flush();
     }
 
@@ -133,9 +131,7 @@ class LectureRepository extends ServiceEntityRepository
             return;
         }
 
-        $lecture->removeUser($user);
-        $lecture->setSlotsOccupied($lecture->getSlotsOccupied() - 1);
-
+        $lecture->removeUser($user)->setSlotsOccupied($lecture->getSlotsOccupied() - 1);
         $this->getEntityManager()->flush();
     }
 }

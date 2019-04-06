@@ -257,6 +257,14 @@ class Lecture
     }
 
     /**
+     * @param int $slotsOccupied
+     */
+    public function setSlotsOccupied(int $slotsOccupied): void
+    {
+        $this->slotsOccupied = $slotsOccupied;
+    }
+
+    /**
      * @return Collection|User[]
      */
     public function getUsers(): Collection
