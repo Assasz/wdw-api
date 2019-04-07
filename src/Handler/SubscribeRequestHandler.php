@@ -3,7 +3,7 @@
 namespace App\Handler;
 
 use App\Entity\SubscribeRequest;
-use App\Repository\LectureRepository;
+use App\Service\SubscriptionService;
 use Symfony\Component\Messenger\Handler\MessageHandlerInterface;
 
 /**
@@ -16,27 +16,25 @@ use Symfony\Component\Messenger\Handler\MessageHandlerInterface;
 class SubscribeRequestHandler implements MessageHandlerInterface
 {
     /**
-     * @var LectureRepository
+     * @var SubscriptionService
      */
-    private $lectureRepository;
+    private $subscriptionService;
 
     /**
      * SubscribeRequestHandler constructor.
      *
-     * @param LectureRepository $lectureRepository
+     * @param SubscriptionService $subscriptionService
      */
-    public function __construct(LectureRepository $lectureRepository)
+    public function __construct(SubscriptionService $subscriptionService)
     {
-        $this->lectureRepository = $lectureRepository;
+        $this->subscriptionService = $subscriptionService;
     }
 
     /**
      * @param SubscribeRequest $request
-     * @throws \Doctrine\ORM\ORMException
-     * @throws \Doctrine\ORM\OptimisticLockException
      */
     public function __invoke(SubscribeRequest $request): void
     {
-        $this->lectureRepository->subscribe($request->idLecture, $request->idUser);
+        $this->subscriptionService->subscribe($request->idLecture, $request->idUser);
     }
 }

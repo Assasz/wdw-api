@@ -3,7 +3,7 @@
 namespace App\Handler;
 
 use App\Entity\UnsubscribeRequest;
-use App\Repository\LectureRepository;
+use App\Service\SubscriptionService;
 use Symfony\Component\Messenger\Handler\MessageHandlerInterface;
 
 /**
@@ -16,27 +16,25 @@ use Symfony\Component\Messenger\Handler\MessageHandlerInterface;
 class UnsubscribeRequestHandler implements MessageHandlerInterface
 {
     /**
-     * @var LectureRepository
+     * @var SubscriptionService
      */
-    private $lectureRepository;
+    private $subscriptionService;
 
     /**
      * UnsubscribeRequestHandler constructor.
      *
-     * @param LectureRepository $lectureRepository
+     * @param SubscriptionService $subscriptionService
      */
-    public function __construct(LectureRepository $lectureRepository)
+    public function __construct(SubscriptionService $subscriptionService)
     {
-        $this->lectureRepository = $lectureRepository;
+        $this->subscriptionService = $subscriptionService;
     }
 
     /**
      * @param UnsubscribeRequest $request
-     * @throws \Doctrine\ORM\ORMException
-     * @throws \Doctrine\ORM\OptimisticLockException
      */
     public function __invoke(UnsubscribeRequest $request): void
     {
-        $this->lectureRepository->unsubscribe($request->idLecture, $request->idUser);
+        $this->subscriptionService->unsubscribe($request->idLecture, $request->idUser);
     }
 }
