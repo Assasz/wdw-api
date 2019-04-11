@@ -8,6 +8,7 @@ use App\Entity\Specialisation;
 use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
+use Doctrine\ORM\Query;
 
 /**
  * Class EnrollmentRepository
@@ -29,12 +30,18 @@ class EnrollmentRepository extends ServiceEntityRepository
     /**
      * Returns active user enrollments
      *
-     * @param User $user
+     * @param int $idUser
      * @return array
      * @throws InvalidArgumentException
      */
-    public function getActiveByUser(User $user): array
+    public function getActiveByUser(int $idUser): array
     {
+        $user = $this->getEntityManager()->getRepository(User::class)->find($idUser);
+
+        if (!$user instanceof User) {
+            throw new InvalidArgumentException('User by given ID does not exist.');
+        }
+
         $specialisationsIds = $user->getSpecialisations()->map(function (Specialisation $specialisation) {
             return $specialisation->getId();
         })[0];

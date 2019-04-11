@@ -97,7 +97,7 @@ class SubscriptionService
             return;
         }
 
-        $activeEnrollments = $this->enrollmentRepository->getActiveByUser($user);
+        $activeEnrollments = $this->enrollmentRepository->getActiveByUser($user->getId());
         $lectureEnrollment = null;
 
         foreach ($activeEnrollments as $enrollment) {
