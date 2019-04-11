@@ -59,21 +59,22 @@ class AuthenticationSuccessListener
         }
 
         $data['user'] = $this->iriConverter->getIriFromItem($user);
-        $ectsLimit = 0;
 
-        foreach ($this->enrollmentRepository->getActiveByUser($user->getId()) as $enrollment) {
-            $data['enrollments'][] = $this->iriConverter->getIriFromItem($enrollment);
-            $ectsLimit += $enrollment->getSpecialisation()->getEctsLimit();
+        foreach ($this->enrollmentRepository->getActiveByUser($user->getId()) as $i => $enrollment) {
+            $data['enrollments'][$i] = $this->normalizer->normalize($enrollment);
+            $data['enrollments'][$i]['ectsLimit'] = $enrollment->getSpecialisation()->getEctsLimit();
+            $data['enrollments'][$i]['ects'] = $enrollment->getLectures()
+                ->filter(function (Lecture $lecture) use ($user) {
+                    return $user->getLectures()->contains($lecture);
+                })
+                ->map(function (Lecture $lecture) {
+                    return $lecture->getEcts();
+                })[0];
 
-            foreach ($enrollment->getLectures() as $lecture) {
-                $data['lectures'][] = $this->normalizer->normalize($lecture);
+            foreach ($enrollment->getLectures() as $j => $lecture) {
+                $data['enrollments'][$i]['lectures'][$j] = $this->normalizer->normalize($lecture);
             }
         }
-
-        $data['ectsLimit'] = $ectsLimit;
-        $data['ects'] = $user->getLectures()->map(function (Lecture $lecture) {
-            return $lecture->getEcts();
-        })[0];
 
         $event->setData($data);
     }
