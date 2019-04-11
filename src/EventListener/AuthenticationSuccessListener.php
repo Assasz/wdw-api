@@ -24,7 +24,7 @@ class AuthenticationSuccessListener
             return;
         }
 
-        $data['idUser'] = $user->getIdUser();
+        $data['idUser'] = $user->getId();
 
         $event->setData($data);
     }

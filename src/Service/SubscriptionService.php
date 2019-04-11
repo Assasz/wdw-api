@@ -2,6 +2,10 @@
 
 namespace App\Service;
 
+use App\Entity\Enrollment;
+use App\Entity\Lecture;
+use App\Entity\User;
+use App\Repository\EnrollmentRepository;
 use App\Repository\LectureRepository;
 use App\Repository\UserRepository;
 use App\Utils\Logger\LoggerInterface;
@@ -25,6 +29,11 @@ class SubscriptionService
     private $userRepository;
 
     /**
+     * @var EnrollmentRepository
+     */
+    private $enrollmentRepository;
+
+    /**
      * @var EntityManagerInterface
      */
     private $entityManager;
@@ -39,13 +48,15 @@ class SubscriptionService
      *
      * @param LectureRepository $lectureRepository
      * @param UserRepository $userRepository
+     * @param EnrollmentRepository $enrollmentRepository
      * @param EntityManagerInterface $entityManager
      * @param LoggerInterface $logger
      */
-    public function __construct(LectureRepository $lectureRepository, UserRepository $userRepository, EntityManagerInterface $entityManager, LoggerInterface $logger)
+    public function __construct(LectureRepository $lectureRepository, UserRepository $userRepository, EnrollmentRepository $enrollmentRepository, EntityManagerInterface $entityManager, LoggerInterface $logger)
     {
         $this->lectureRepository = $lectureRepository;
         $this->userRepository = $userRepository;
+        $this->enrollmentRepository = $enrollmentRepository;
         $this->entityManager = $entityManager;
         $this->logger = $logger;
     }
@@ -60,7 +71,7 @@ class SubscriptionService
     {
         $lecture = $this->lectureRepository->find($idLecture);
 
-        if (empty($lecture)) {
+        if (!$lecture instanceof Lecture) {
             $this->logger->log("[Subscribe] Lecture (ID:{$idLecture}) does not exist.");
 
             return;
@@ -68,7 +79,7 @@ class SubscriptionService
 
         $user = $this->userRepository->find($idUser);
 
-        if (empty($user)) {
+        if (!$user instanceof User) {
             $this->logger->log("[Subscribe] User (ID:{$idUser}) does not exist.");
 
             return;
@@ -86,26 +97,35 @@ class SubscriptionService
             return;
         }
 
-        if (!$user->getSpecialisations()->contains($lecture->getSpecialisation())) {
+        $activeEnrollments = $this->enrollmentRepository->getActiveByUser($user);
+        $lectureEnrollment = null;
+
+        foreach ($activeEnrollments as $enrollment) {
+            if ($enrollment->getLectures()->contains($lecture)) {
+                $lectureEnrollment = $enrollment;
+
+                break;
+            }
+        }
+
+        if (!$lectureEnrollment instanceof Enrollment) {
             $this->logger->log("[Subscribe] User (ID:{$idUser}) has no access to lecture (ID:{$idLecture}).");
 
             return;
         }
 
-        $specialisation = $user->getSpecialisations()->get(
-            $user->getSpecialisations()->indexOf($lecture->getSpecialisation())
-        );
-
-        $userLectures = $user->getLectures()->filter(function (Lecture $lecture) use ($specialisation) {
-            return $lecture->getSpecialisation()->getIdSpecialisation() === $specialisation->getIdSpecialisation();
+        $userLectures = $user->getLectures()->filter(function (Lecture $lecture) use ($lectureEnrollment) {
+            return $lecture->getEnrollments()->contains($lectureEnrollment);
         });
 
         $lecturesEcts = $userLectures->map(function (Lecture $lecture) {
             return $lecture->getEcts();
-        });
+        })[0];
 
-        if ($lecturesEcts[0] >= $specialisation->getEctsLimit()) {
-            $this->logger->log("[Subscribe] User (ID:{$idUser}) has exceeded specialisation (ID:{$specialisation->getIdSpecialisation()}) ECTS limit.");
+        $specialisation = $lectureEnrollment->getSpecialisation();
+
+        if ($specialisation->getEctsLimit() <= $lecturesEcts + $lecture->getEcts()) {
+            $this->logger->log("[Subscribe] User (ID:{$idUser}) has exceeded specialisation (ID:{$specialisation->getId()}) ECTS limit.");
 
             return;
         }
@@ -124,7 +144,7 @@ class SubscriptionService
     {
         $lecture = $this->lectureRepository->find($idLecture);
 
-        if (empty($lecture)) {
+        if (!$lecture instanceof Lecture) {
             $this->logger->log("[Unsubscribe] Lecture (ID:{$idLecture}) does not exist.");
 
             return;
@@ -132,7 +152,7 @@ class SubscriptionService
 
         $user = $this->userRepository->find($idUser);
 
-        if (empty($user)) {
+        if (!$user instanceof User) {
             $this->logger->log("[Unsubscribe] User (ID:{$idUser}) does not exist.");
 
             return;

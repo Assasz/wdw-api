@@ -35,7 +35,7 @@ class Specialisation
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
-    private $idSpecialisation;
+    private $id;
 
     /**
      * @var string
@@ -73,26 +73,11 @@ class Specialisation
     private $ectsLimit;
 
     /**
-     * @var Collection
-     *
-     * @ORM\OneToMany(targetEntity="Lecture", mappedBy="specialisation")
-     */
-    private $lectures;
-
-    /**
-     * Specialisation constructor.
-     */
-    public function __construct()
-    {
-        $this->lectures = new ArrayCollection();
-    }
-
-    /**
      * @return int|null
      */
-    public function getIdSpecialisation(): ?int
+    public function getId(): ?int
     {
-        return $this->idSpecialisation;
+        return $this->id;
     }
 
     /**
@@ -136,10 +121,10 @@ class Specialisation
     }
 
     /**
-     * @return Collection|Lecture[]
+     * @return Enrollment|null
      */
-    public function getLectures(): Collection
+    public function getEnrollment(): ?Enrollment
     {
-        return $this->lectures;
+        return $this->enrollment;
     }
 }

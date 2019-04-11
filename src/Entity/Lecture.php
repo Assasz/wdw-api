@@ -88,7 +88,7 @@ class Lecture
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
-    private $idLecture;
+    private $id;
 
     /**
      * @var string
@@ -161,12 +161,11 @@ class Lecture
     private $users;
 
     /**
-     * @var Specialisation
+     * @var Collection
      *
-     * @ORM\ManyToOne(targetEntity="Specialisation", inversedBy="lectures")
-     * @ORM\JoinColumn(name="id_specialisation", referencedColumnName="id_specialisation")
+     * @ORM\ManyToMany(targetEntity="Enrollment", mappedBy="lectures")
      */
-    private $specialisation;
+    private $enrollments;
 
     /**
      * Lecture constructor.
@@ -174,14 +173,15 @@ class Lecture
     public function __construct()
     {
         $this->users = new ArrayCollection();
+        $this->enrollments = new ArrayCollection();
     }
 
     /**
      * @return int|null
      */
-    public function getIdLecture(): ?int
+    public function getId(): ?int
     {
-        return $this->idLecture;
+        return $this->id;
     }
 
     /**
@@ -301,10 +301,10 @@ class Lecture
     }
 
     /**
-     * @return Specialisation|null
+     * @return Collection|Enrollment[]
      */
-    public function getSpecialisation(): ?Specialisation
+    public function getEnrollments(): Collection
     {
-        return $this->specialisation;
+        return $this->enrollments;
     }
 }

@@ -36,7 +36,7 @@ class User implements UserInterface
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
-    private $idUser;
+    private $id;
 
     /**
      * Student index
@@ -109,9 +109,9 @@ class User implements UserInterface
     /**
      * @return int
      */
-    public function getIdUser(): int
+    public function getId(): int
     {
-        return $this->idUser;
+        return $this->id;
     }
 
     /**
