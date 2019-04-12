@@ -69,7 +69,7 @@ class AuthenticationSuccessListener
                 })
                 ->map(function (Lecture $lecture) {
                     return $lecture->getEcts();
-                })[0];
+                })[0] ?? 0;
 
             foreach ($enrollment->getLectures() as $j => $lecture) {
                 $data['enrollments'][$i]['lectures'][$j] = $this->normalizer->normalize($lecture);
