@@ -54,7 +54,7 @@ class Enrollment
     /**
      * @var Specialisation
      *
-     * @ORM\OneToOne(targetEntity="Specialisation", mappedBy="enrollment")
+     * @ORM\OneToOne(targetEntity="Specialisation")
      * @ORM\JoinColumn(name="id_specialisation", referencedColumnName="id_specialisation")
      */
     private $specialisation;
@@ -62,7 +62,7 @@ class Enrollment
     /**
      * @var Collection
      *
-     * @ORM\ManyToMany(targetEntity="Lecture")
+     * @ORM\ManyToMany(targetEntity="Lecture", inversedBy="enrollments")
      * @ORM\JoinTable(name="enrollments_lectures",
      *      joinColumns={@ORM\JoinColumn(name="id_enrollment", referencedColumnName="id_enrollment")},
      *      inverseJoinColumns={@ORM\JoinColumn(name="id_lecture", referencedColumnName="id_lecture")}
