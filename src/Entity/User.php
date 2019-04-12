@@ -7,6 +7,7 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\UserInterface;
 use ApiPlatform\Core\Annotation\ApiResource;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * User
@@ -24,7 +25,8 @@ use ApiPlatform\Core\Annotation\ApiResource;
  *         "get"={
  *             "access_control"="is_granted('ROLE_USER')"
  *         }
- *     }
+ *     },
+ *     normalizationContext={"groups"={"read"}}
  * )
  */
 class User implements UserInterface
@@ -35,6 +37,7 @@ class User implements UserInterface
      * @ORM\Column(name="id_user", type="integer", nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
+     * @Groups("read")
      */
     private $id;
 
@@ -44,6 +47,7 @@ class User implements UserInterface
      * @var string
      *
      * @ORM\Column(name="login", type="string", length=255, nullable=false)
+     * @Groups("read")
      */
     private $login;
 
@@ -58,6 +62,7 @@ class User implements UserInterface
      * @var string
      *
      * @ORM\Column(name="firstname", type="string", length=255, nullable=false)
+     * @Groups("read")
      */
     private $firstname;
 
@@ -65,6 +70,7 @@ class User implements UserInterface
      * @var string
      *
      * @ORM\Column(name="lastname", type="string", length=255, nullable=false)
+     * @Groups("read")
      */
     private $lastname;
 
@@ -72,6 +78,7 @@ class User implements UserInterface
      * @var string
      *
      * @ORM\Column(name="email", type="string", length=255, nullable=true)
+     * @Groups("read")
      */
     private $email;
 
@@ -83,6 +90,8 @@ class User implements UserInterface
      *      joinColumns={@ORM\JoinColumn(name="id_user", referencedColumnName="id_user")},
      *      inverseJoinColumns={@ORM\JoinColumn(name="id_lecture", referencedColumnName="id_lecture")}
      * )
+     *
+     * @Groups("read")
      */
     private $lectures;
 
@@ -94,6 +103,8 @@ class User implements UserInterface
      *      joinColumns={@ORM\JoinColumn(name="id_user", referencedColumnName="id_user")},
      *      inverseJoinColumns={@ORM\JoinColumn(name="id_specialisation", referencedColumnName="id_specialisation")}
      * )
+     *
+     * @Groups("read")
      */
     private $specialisations;
 
@@ -155,7 +166,7 @@ class User implements UserInterface
      */
     public function getSalt()
     {
-        return null;
+
     }
 
     /**
@@ -164,6 +175,14 @@ class User implements UserInterface
      * @return string The username
      */
     public function getUsername()
+    {
+        return $this->login;
+    }
+
+    /**
+     * @return string
+     */
+    public function getLogin(): string
     {
         return $this->login;
     }
