@@ -6,6 +6,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use ApiPlatform\Core\Annotation\ApiResource;
+use App\Controller\Lectures;
 
 /**
  * Enrollment
@@ -22,6 +23,39 @@ use ApiPlatform\Core\Annotation\ApiResource;
  *     itemOperations={
  *         "get"={
  *             "access_control"="is_granted('ROLE_USER')"
+ *         },
+ *         "lectures"={
+ *             "method"="GET",
+ *             "path"="/enrollments/{id}/lectures",
+ *             "controller"=Lectures::class,
+ *             "access_control"="is_granted('ROLE_USER')",
+ *             "swagger_context"={
+ *                  "summary"="Retrieves the collection of Lecture resources, that belongs to given Enrollment.",
+ *                  "responses"={
+ *                      "200"={
+ *                          "description"="Retrieves the collection of Lecture resources.",
+ *                          "examples"={
+ *                              "application/json"={
+ *                                  {
+ *                                      "id": 0,
+ *                                      "name": "string",
+ *                                      "ects": 0,
+ *                                      "lecturer": "string",
+ *                                      "auditorium": "string",
+ *                                      "weekday": "string",
+ *                                      "week": "string",
+ *                                      "hour": "12:00",
+ *                                      "slots": 0,
+ *                                      "slotsOccupied": 0,
+ *                                      "users": {
+ *                                          0:"string"
+ *                                      }
+ *                                  }
+ *                              }
+ *                          }
+ *                      }
+ *                  }
+ *             }
  *         }
  *     }
  * )
