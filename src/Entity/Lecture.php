@@ -24,7 +24,7 @@ use ApiPlatform\Core\Annotation\ApiResource;
  *                          "examples"={
  *                              "application/json"={
  *                                  {
- *                                      "idLecture": 0,
+ *                                      "id": 0,
  *                                      "name": "string",
  *                                      "ects": 0,
  *                                      "lecturer": "string",
@@ -54,7 +54,7 @@ use ApiPlatform\Core\Annotation\ApiResource;
  *                          "description"="Retrieves a Lecture resource.",
  *                          "examples"={
  *                              "application/json"={
- *                                  "idLecture": 0,
+ *                                  "id": 0,
  *                                  "name": "string",
  *                                  "ects": 0,
  *                                  "lecturer": "string",
