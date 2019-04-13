@@ -38,4 +38,12 @@ final class SubscribeRequest
      * @Assert\Type(type="integer")
      */
     public $idLecture;
+
+    /**
+     * @var int
+     *
+     * @Assert\NotBlank
+     * @Assert\Type(type="integer")
+     */
+    public $idEnrollment;
 }

@@ -35,6 +35,6 @@ class SubscribeRequestHandler implements MessageHandlerInterface
      */
     public function __invoke(SubscribeRequest $request): void
     {
-        $this->subscriptionService->subscribe($request->idLecture, $request->idUser);
+        $this->subscriptionService->subscribe($request->idLecture, $request->idUser, $request->idEnrollment);
     }
 }

@@ -66,8 +66,9 @@ class SubscriptionService
      *
      * @param int $idLecture
      * @param int $idUser
+     * @param int $idEnrollment
      */
-    public function subscribe(int $idLecture, int $idUser): void
+    public function subscribe(int $idLecture, int $idUser, int $idEnrollment): void
     {
         $lecture = $this->lectureRepository->find($idLecture);
 
@@ -97,30 +98,38 @@ class SubscriptionService
             return;
         }
 
-        $activeEnrollments = $this->enrollmentRepository->getActiveByUser($user->getId());
-        $lectureEnrollment = null;
+        $lectureEnrollment = $this->enrollmentRepository->find($idEnrollment);
 
-        foreach ($activeEnrollments as $enrollment) {
-            if ($enrollment->getLectures()->contains($lecture)) {
-                $lectureEnrollment = $enrollment;
+        if (!$lectureEnrollment instanceof Enrollment) {
+            $this->logger->log("[Subscribe] Enrollment (ID:{$idEnrollment}) does not exist.");
+
+            return;
+        }
+
+        $userEnrollments = $this->enrollmentRepository->getActiveByUser($user->getId());
+        $userHasAccess = false;
+
+        foreach ($userEnrollments as $userEnrollment) {
+            if ($userEnrollment->getId() === $lectureEnrollment->getId()) {
+                $userHasAccess = true;
 
                 break;
             }
         }
 
-        if (!$lectureEnrollment instanceof Enrollment) {
+        if (!$userHasAccess || !$lectureEnrollment->getLectures()->contains($lecture)) {
             $this->logger->log("[Subscribe] User (ID:{$idUser}) has no access to lecture (ID:{$idLecture}).");
 
             return;
         }
 
-        $userLectures = $user->getLectures()->filter(function (Lecture $lecture) use ($lectureEnrollment) {
-            return $lecture->getEnrollments()->contains($lectureEnrollment);
-        });
-
-        $lecturesEcts = $userLectures->map(function (Lecture $lecture) {
-            return $lecture->getEcts();
-        })[0];
+        $lecturesEcts = $user->getLectures()
+            ->filter(function (Lecture $lecture) use ($lectureEnrollment) {
+                return $lecture->getEnrollments()->contains($lectureEnrollment);
+            })
+            ->map(function (Lecture $lecture) {
+                return $lecture->getEcts();
+            })[0];
 
         $specialisation = $lectureEnrollment->getSpecialisation();
 
