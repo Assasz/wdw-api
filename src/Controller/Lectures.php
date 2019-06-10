@@ -3,7 +3,6 @@
 namespace App\Controller;
 
 use App\Entity\Enrollment;
-use App\Repository\EnrollmentRepository;
 
 /**
  * Class Lectures
@@ -14,21 +13,6 @@ use App\Repository\EnrollmentRepository;
  */
 class Lectures
 {
-    /**
-     * @var EnrollmentRepository
-     */
-    private $enrollmentRepository;
-
-    /**
-     * Lectures constructor.
-     *
-     * @param EnrollmentRepository $enrollmentRepository
-     */
-    public function __construct(EnrollmentRepository $enrollmentRepository)
-    {
-        $this->enrollmentRepository = $enrollmentRepository;
-    }
-
     /**
      * @param Enrollment $data
      * @return array
